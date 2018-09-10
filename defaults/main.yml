@@ -1,0 +1,12 @@
+---
+
+#OpenBSD_login_class:
+#  name:
+
+#  service:
+#    name:
+#    restart:
+
+#  capabilities:
+#  - name:
+#    value:
