@@ -6,20 +6,20 @@ An Ansible Role that allows to configure a login class on OpenBSD.
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    name:                       # name of the login class
+    name: [mandatory]                      # name of the login class
     
 The `name` of the class must be provided.
           
-    capabilities: []
-      - name:
-        value:
+    capabilities: []                       # the list of capabilities
+      - name: [mandatory]
+        value: [mandatory]
 
 The `capabilities` are listed here.
 Each item must include the `name` of the capability and its `value`.
     
-    service: [optional]        # service configuration                    
-      name:
-      restart:
+    service: [optional]                    # a service configuration                    
+      name: [mandatory]
+      restart: [mandatory]
       
 If the login class of a service is modifier, it is possible to restart the service by enabling these variables.
 
