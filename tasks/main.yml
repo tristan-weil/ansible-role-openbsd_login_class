@@ -3,7 +3,7 @@
 - name: add a new login class
   blockinfile:
     dest: /etc/login.conf
-    block:
+    block: |
       {{ OpenBSD_login_class.name }}:\
       {% for cap in OpenBSD_login_class.capabilities %}
         :{{ cap.name }}{% if cap.value is defined %}={{ cap.value }}{% endif %}:{% if not loop.last %}/{% endif %}
