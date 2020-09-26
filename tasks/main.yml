@@ -1,28 +1,29 @@
 ---
 
-- name: add a new login class
+- name: 'add new login classes'
   blockinfile:
-    dest: /etc/login.conf
+    dest: '/etc/login.conf'
     block: |
-      {{ OpenBSD_login_class.name }}:\
-      {% for cap in OpenBSD_login_class.capabilities %}
-        :{{ cap.name }}{% if cap.value is defined %}={{ cap.value }}{% endif %}:{% if not loop.last %}/{% endif %}
+      {{ item.name }}:\
+      {% for cap in item.capabilities %}
+          :{{ cap.name }}{% if cap.value is defined %}={{ cap.value }}{% endif %}:{% if not loop.last %}\{% endif %}
+
       {% endfor %}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ OpenBSD_login_class.name }}"
-    state: "{{ OpenBSD_login_class.state | default('present') }}"
-  register: __OpenBSD_login_class_result
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ openbsd_login_classes }}"
+  register: __openbsd_login_class_result
 
-- name: regenerate login.conf.db if needed
-  shell: >
-    [ -f /etc/login.conf.db ] && cap_mkdb /etc/login.conf
+- name: 'regenerate login.conf.db if needed'  # noqa 503
+  shell: |
+    cap_mkdb /etc/login.conf
   changed_when: False
-  when: __OpenBSD_login_class_result.changed
-
-- name: restart service if needed
-  service:
-    name: "{{ OpenBSD_login_class.service.name }}"
-    state: restarted
   when: >
-    __OpenBSD_login_class_result.changed
-    and OpenBSD_login_class.service is defined
-    and OpenBSD_login_class.service.restart
+    openbsd_login_class_capdb | bool
+    and __openbsd_login_class_result.changed
+
+- name: 'restart service if needed'  # noqa 503
+  service:
+    name: "{{ item }}"
+    state: 'restarted'
+  loop: "{{ __openbsd_login_class_result.results | json_query('[?changed].item[].services[]') | list }}"

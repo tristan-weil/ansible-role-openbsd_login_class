@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  name: 'Verify'
+  become: True
+  gather_facts: True
+
+  tasks:
+    - name: 'Check ulimit -n'
+      shell: |
+        su -s /bin/ksh molecule -c 'ulimit -n' | egrep 666
+      register: __verify_cmd
+      failed_when: __verify_cmd.rc != 0
+
+    - name: 'Check ulimit -s'
+      shell: |
+        su -s /bin/ksh molecule -c 'ulimit -s' | egrep 8192
+      register: __verify_cmd
+      failed_when: __verify_cmd.rc != 0

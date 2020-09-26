@@ -2,68 +2,89 @@
 
 An Ansible Role that allows to configure a login class on OpenBSD.
 
+[![Actions Status](https://github.com/tristan-weil/ansible-role-openbsd_login_class/workflows/molecule/badge.svg?branch=master)](https://github.com/tristan-weil/ansible-role-openbsd_login_class/actions)
+
 ## Role Variables
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
-
-    name: [mandatory]                      # name of the login class
-    
-The `name` of the class must be provided.
-          
-    capabilities: []                       # the list of capabilities
-      - name: [mandatory]
-        value: [mandatory]
-
-The `capabilities` are listed here.
-Each item must include the `name` of the capability and its `value`.
-    
-    service: [optional]                    # a service configuration                    
-      name: [mandatory]
-      restart: [mandatory]
-      
-If the login class of a service is modifier, it is possible to restart the service by enabling these variables.
+Available variables are listed below, (see also `defaults/main.yml`).
 
 See https://man.openbsd.org/login.conf.5 for more information.
 
-## Dependencies
+Mandatory variables:
 
-None.
+| Variable      | Description |
+| :------------ | :---------- |
+
+Optional variables:
+
+| Variable      | Default | Description |
+| :------------ | :------ | :---------- |
+| openbsd_login_class_capdb | False | *True / False*: enable the building of the /etc/login.db file
+| openbsd_login_classes | [] | a list of <*login class*>
+
+### <*login class*>
+
+A *login_class* represents a new entry in the /etc/login.conf file.
+
+Mandatory variables:
+
+| Variable      | Description |
+| :------------ | :---------- |
+| name          | the name of the class |
+
+Optional variables:
+
+| Variable      | Default | Description |
+| :------------ | :------ | :---------- |
+| state         | present | *present / absent*: to add or remove the class |
+| services      | []      | a list of services to restart |
+| capabilities  | []      | a list of <*capability*> |
+
+### <*capability*>
+
+A *capability* represents a capability.
+
+Mandatory variables:
+
+| Variable      | Description |
+| :------------ | :---------- |
+| name          | the name of the capability |
+| value         | the value of the capability |
+
+Optional variables:
+
+| Variable      | Default | Description |
+| :------------ | :------ | :---------- |
 
 ## Example Playbook
 
-    - hosts: webservers
+    - hosts: 'webservers'
       roles:
-        - role: OpenBSD_login_class
-          name: elasticsearch
+        - role: 'OpenBSD_login_class'
+          name: 'elasticsearch'
 
           service:
-            name: elasticsearch
+            name: 'elasticsearch'
             restart: True
         
           capabilities:
-          - name: openfiles
+          - name: 'openfiles'
             value: 65536
-          - name: tc
+          - name: 'tc'
             value: daemon
             
 ## Todo
 
 None.
 
+## Dependencies
+
+None.
+
+## Supported platforms
+
+See [meta/main.yml](https://github.com/tristan-weil/ansible-role-openbsd_login_class/blob/master/meta/main.yml)
+
 ## License
 
-```
-Copyright (c) 2018, 2019 Tristan Weil <titou@lab.t18s.fr>
-
-Permission to use, copy, modify, and distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-```
+See [LICENSE.md](https://github.com/tristan-weil/ansible-role-openbsd_login_class/blob/master/LICENSE.md)

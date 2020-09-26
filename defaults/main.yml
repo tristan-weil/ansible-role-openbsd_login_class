@@ -1,12 +1,12 @@
 ---
 
-# OpenBSD_login_class:
-#  name:
+openbsd_login_class_capdb: False
 
-#  service:
-#    name:
-#    restart:
-
-#  capabilities:
-#  - name:
-#    value:
+openbsd_login_classes: []
+# - name:
+#   state: 'present'
+#   services:
+#    - xxx
+#   capabilities:
+#     - name:
+#       value:
