@@ -87,4 +87,4 @@ See [meta/main.yml](https://github.com/tristan-weil/ansible-role-openbsd_login_c
 
 ## License
 
-See [LICENSE.md](https://github.com/tristan-weil/ansible-role-openbsd_login_class/blob/master/LICENSE.md)
+See [LICENSE.md](LICENSE.md)
